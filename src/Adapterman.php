@@ -2,6 +2,7 @@
 
 namespace Adapterman;
 
+use Adapterman\Protocols\Http;
 use Exception;
 
 class Adapterman
@@ -20,6 +21,7 @@ class Adapterman
             
             // OK initialize the functions
             require __DIR__ . '/AdapterFunctions.php';
+            Http::init();
 
         } catch (Exception $e) {
             fwrite(STDERR, self::NAME . ' Error:' . PHP_EOL);

@@ -1,6 +1,6 @@
 <?php
 
-use Workerman\Protocols\Http;
+use Adapterman\Protocols\Http;
 
 /**
  * Send a raw HTTP header
@@ -62,7 +62,7 @@ function setcookie(string $name, string $value = '', int|array $expires = 0, str
         $httponly = $expires['httponly'] ?? FALSE;
     }
 
-    return Http::setcookie($name, $value, $expires, $path, $domain, $secure, $httponly);
+    return Http::setCookie($name, $value, $expires, $path, $domain, $secure, $httponly);
 }
 
 function session_create_id(string $prefix = ''): string
@@ -121,6 +121,11 @@ function set_time_limit(int $seconds): bool
     // Disable set_time_limit to not stop the worker
     // by default CLI sapi use 0 (unlimited)
     return true;
+}
+
+function headers_sent(): bool
+{
+    return false;
 }
 
 /* function exit(string $status = ''): void {  //string|int
