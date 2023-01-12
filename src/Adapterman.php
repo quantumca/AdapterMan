@@ -21,6 +21,7 @@ class Adapterman
             
             // OK initialize the functions
             require __DIR__ . '/AdapterFunctions.php';
+            class_alias(Http::class, \Protocols\Http::class);
             Http::init();
 
         } catch (Exception $e) {

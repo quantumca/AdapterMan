@@ -1,0 +1,1 @@
+/usr/local/Cellar/php/8.2.1/bin/php -c vendor/joanhey/adapterman/cli-php.ini vendor/joanhey/adapterman/src/frameworks/index.php "$@"

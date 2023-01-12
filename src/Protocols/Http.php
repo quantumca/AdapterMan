@@ -14,13 +14,13 @@ class Http
 {
     /**
      * Http status.
-     * @var string 
+     * @var string
      */
     public static string $status = '';
 
     /**
      * Headers.
-     * @var array 
+     * @var array
      */
     public static array $headers = [];
 
@@ -74,13 +74,13 @@ class Http
 
     /**
      * Session cookie httponly.
-     * @var bool 
+     * @var bool
      */
     public static bool $sessionCookieHttponly;
-    
+
     /**
      * Session gc interval.
-     * @var int 
+     * @var int
      */
     public static int $sessionGcInterval = 600;
 
@@ -183,9 +183,11 @@ class Http
         static::$sessionCookieSecure = (bool)\ini_get('session.cookie_secure');
         static::$sessionCookieHttponly = (bool)\ini_get('session.cookie_httponly');
 
-        Timer::add(static::$sessionGcInterval, function () {
-            static::tryGcSessions();
-        });
+        if (class_exists(Timer::class)) {
+            Timer::add(static::$sessionGcInterval, function () {
+                static::tryGcSessions();
+            });
+        }
     }
 
     /**

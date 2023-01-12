@@ -1,5 +1,5 @@
 {
-    "name": "joanhey/adapterman",
+    "name": "workerman/adapterman",
     "type": "library",
     "keywords": [
         "workerman",
@@ -24,6 +24,7 @@
         "php": "^8",
         "workerman/workerman": "^3.5|^4"
     },
+    "bin": ["adapterman"],
     "suggest": {
         "ext-event": "For better performance. "
     },
