@@ -21,18 +21,13 @@ $http_worker->onMessage = static function ($connection, $request) {
     $connection->send(run($request));
 };
 
-$app = require_once __DIR__.'/../../../../../bootstrap/app.php';
-
-global $kernel;
-
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-function staticFile($path)
+function tryFiles($path)
 {
     $parse = parse_url($path);
     $result = [];
     if ($parse && isset($parse['path'])) {
-        if (is_file(file_get_contents(__DIR__ . '/../../../../../public' . $parse['path'])) && Str::endsWith(Str::lower($parse['path']), [
+        $filepath = __DIR__ . '/../../../../../public' . $parse['path'];
+        if (is_file($filepath) && Str::endsWith(Str::lower($parse['path']), [
             '.css', '.js',
             '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico',
             '.woff', '.woff2', '.ttf', '.eot', '.otf',
@@ -42,7 +37,7 @@ function staticFile($path)
             '.zip', '.rar', '.7z', '.gz', '.tar', '.bz2',
         ]) ) {
             $result = [
-                'content' => file_get_contents(__DIR__ . '/../../../../../public' . $parse['path'])
+                'content' => file_get_contents($filepath)
             ];
 
             $ext = Arr::last(explode('.', $parse['path']));
@@ -89,8 +84,27 @@ function staticFile($path)
 
 function run($workermanRequest)
 {
-    Illuminate\Http\Request::setFactory(function () use ($workermanRequest) {
-        return new Illuminate\Http\Request(
+    $app = new Illuminate\Foundation\Application(
+        $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__ . '/../../../../../bootstrap/')
+    );
+
+    $app->singleton(
+        Illuminate\Contracts\Http\Kernel::class,
+        App\Http\Kernel::class
+    );
+    
+    $app->singleton(
+        Illuminate\Contracts\Console\Kernel::class,
+        App\Console\Kernel::class
+    );
+    
+    $app->singleton(
+        Illuminate\Contracts\Debug\ExceptionHandler::class,
+        App\Exceptions\Handler::class
+    );
+
+    Illuminate\Http\Request::setFactory(
+        fn () => new Illuminate\Http\Request(
             $workermanRequest['get'],
             $workermanRequest['post'],
             $workermanRequest['request'],
@@ -98,8 +112,8 @@ function run($workermanRequest)
             $workermanRequest['files'],
             $workermanRequest['server'],
             (isset($workermanRequest['server']['CONTENT_TYPE']) && Str::contains($workermanRequest['server']['CONTENT_TYPE'], 'application/json')) ? json_encode($workermanRequest['post']) : null
-        );
-    });
+        )
+    );
 
     $request = Illuminate\Http\Request::capture();
 
@@ -115,7 +129,7 @@ function run($workermanRequest)
                 '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
                 '.zip', '.rar', '.7z', '.gz', '.tar', '.bz2',
             ]) ) {
-                $result = staticFile($parse['path']);
+                $result = tryFiles($parse['path']);
                 if ($result) {
                     if (isset($result['content-type'])) {
                         header('Content-Type: ' . $result['content-type']);
@@ -132,7 +146,7 @@ function run($workermanRequest)
         JWT::customTokenParser(fn () => $request->bearerToken());
     }
 
-    global $kernel;
+    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
     ob_start();
 
