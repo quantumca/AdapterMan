@@ -1,1 +1,1 @@
-php -c vendor/quantumca/adapterman/cli-php.ini vendor/quantumca/adapterman/src/frameworks/index.php "$@"
+php -c vendor/quantumca/adapterman/cli-php.ini vendor/quantumca/adapterman/src/frameworks/$1.php "$@"
