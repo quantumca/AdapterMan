@@ -65,26 +65,55 @@ function setcookie(string $name, string $value = '', int|array $expires = 0, str
     return Http::setCookie($name, $value, $expires, $path, $domain, $secure, $httponly);
 }
 
+/**
+ * Create new session id
+ *
+ * @param string $prefix
+ * @return string
+ */
 function session_create_id(string $prefix = ''): string
 {
     return Http::sessionCreateId();  //TODO fix to use $prefix
 }
 
+/**
+ * Get and/or set the current session id
+ *
+ * @param string $id
+ * @return string
+ */
 function session_id(string $id = ''): string
 {
     return Http::sessionId($id);   //TODO fix return session name or '' if not exists session
 }
 
+/**
+ * Get and/or set the current session name
+ *
+ * @param string $name
+ * @return string
+ */
 function session_name(string $name = ''): string
 {
     return Http::sessionName($name);
 }
 
+/**
+ * Get and/or set the current session save path
+ *
+ * @param string $path
+ * @return string
+ */
 function session_save_path(string $path = ''): string
 {
     return Http::sessionSavePath($path);
 }
 
+/**
+ * Returns the current session status
+ *
+ * @return int
+ */
 function session_status(): int
 {
     if (Http::sessionStarted() === false) {
@@ -93,11 +122,22 @@ function session_status(): int
     return PHP_SESSION_ACTIVE;
 }
 
+/**
+ * Start new or resume existing session
+ *
+ * @param array $options
+ * @return bool
+ */
 function session_start(array $options = []): bool
 {
     return Http::sessionStart();   //TODO fix $options
 }
 
+/**
+ * Write session data and end session
+ *
+ * @return void
+ */
 function session_write_close(): void
 {
     Http::sessionWriteClose();
@@ -116,6 +156,12 @@ function session_regenerate_id(bool $delete_old_session = false): bool
     return Http::sessionRegenerateId($delete_old_session);
 }
 
+/**
+ * Limits the maximum execution time
+ *
+ * @param int $seconds
+ * @return bool
+ */
 function set_time_limit(int $seconds): bool
 {
     // Disable set_time_limit to not stop the worker
@@ -123,6 +169,11 @@ function set_time_limit(int $seconds): bool
     return true;
 }
 
+/**
+ * Checks if or where headers have been sent
+ * 
+ * @return bool
+ */
 function headers_sent(): bool
 {
     return false;
