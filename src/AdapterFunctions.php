@@ -1,10 +1,10 @@
 <?php
 
-use Adapterman\Protocols\Http;
+use Adapterman\Http;
 
 /**
  * Send a raw HTTP header
- * 
+ *
  * @link https://php.net/manual/en/function.header.php
  */
 function header(string $content, bool $replace = true, ?int $http_response_code = null): void
@@ -17,7 +17,7 @@ function header(string $content, bool $replace = true, ?int $http_response_code 
  *
  * @param string $name  The header name to be removed. This parameter is case-insensitive.
  * @return void
- * 
+ *
  * @link https://php.net/manual/en/function.header-remove.php
  */
 function header_remove(string $name): void
@@ -30,7 +30,7 @@ function header_remove(string $name): void
  *
  * @param integer $code [optional] The optional response_code will set the response code.
  * @return integer      The current response code. By default the return value is int(200).
- * 
+ *
  * @link https://www.php.net/manual/en/function.http-response-code.php
  */
 function http_response_code(int $code = null): int
@@ -49,7 +49,7 @@ function http_response_code(int $code = null): int
  * @param boolean $secure
  * @param boolean $httponly
  * @return boolean
- * 
+ *
  * @link https://php.net/manual/en/function.setcookie.php
  */
 function setcookie(string $name, string $value = '', int|array $expires = 0, string $path = '', string $domain = '', bool $secure = FALSE, bool $httponly = FALSE): bool
@@ -108,7 +108,7 @@ function session_write_close(): void
  *
  * @param bool $delete_old_session
  * @return bool
- * 
+ *
  * @link https://www.php.net/manual/en/function.session-regenerate-id.php
  */
 function session_regenerate_id(bool $delete_old_session = false): bool

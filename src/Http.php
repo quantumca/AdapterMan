@@ -1,6 +1,6 @@
 <?php
 
-namespace Adapterman\Protocols;
+namespace Adapterman;
 
 use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Websocket;
