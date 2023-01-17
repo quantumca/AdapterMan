@@ -92,12 +92,12 @@ function run($workermanRequest)
         Illuminate\Contracts\Http\Kernel::class,
         App\Http\Kernel::class
     );
-    
+
     $app->singleton(
         Illuminate\Contracts\Console\Kernel::class,
         App\Console\Kernel::class
     );
-    
+
     $app->singleton(
         Illuminate\Contracts\Debug\ExceptionHandler::class,
         App\Exceptions\Handler::class
@@ -158,5 +158,3 @@ function run($workermanRequest)
 
     return ob_get_clean();
 }
-
-Worker::runAll();

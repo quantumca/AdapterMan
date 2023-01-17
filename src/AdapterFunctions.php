@@ -136,9 +136,11 @@ function session_start(array $options = []): bool
 /**
  * Write session data and end session
  *
- * @return void
+ * @return bool
+ *
+ * @link https://www.php.net/manual/en/function.session-write-close.php
  */
-function session_write_close(): void
+function session_write_close(): bool
 {
     Http::sessionWriteClose();
 }
@@ -171,12 +173,34 @@ function set_time_limit(int $seconds): bool
 
 /**
  * Checks if or where headers have been sent
- * 
+ *
  * @return bool
  */
 function headers_sent(): bool
 {
     return false;
+}
+
+/**
+ * Get cpu count
+ *
+ * @return int
+ */
+function cpu_count(): int
+{
+    // Windows does not support the number of processes setting.
+    if (\DIRECTORY_SEPARATOR === '\\') {
+        return 1;
+    }
+    $count = 4;
+    if (\is_callable('shell_exec')) {
+        if (\strtolower(PHP_OS) === 'darwin') {
+            $count = (int)\shell_exec('sysctl -n machdep.cpu.core_count');
+        } else {
+            $count = (int)\shell_exec('nproc');
+        }
+    }
+    return $count > 0 ? $count : 2;
 }
 
 /* function exit(string $status = ''): void {  //string|int
