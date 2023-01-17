@@ -29,9 +29,15 @@ $http_worker->onMessage = static function ($connection, $request) {
     $connection->send(run($request));
 };
 
+if (class_exists(JWT::class)) {
+    JWT::customTokenParser(function () {
+        return request()->bearerToken();
+    });
+}
+
 global $mime, $hasJwt;
 $mime = new MimeTypes();
-$hasJwt = class_exists(JWT::class);
+
 
 function run($worker_req)
 {
@@ -78,10 +84,6 @@ function run($worker_req)
                 }
             }
         }
-    }
-
-    if ($hasJwt) {
-        JWT::customTokenParser(fn () => $request->bearerToken());
     }
 
     $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
