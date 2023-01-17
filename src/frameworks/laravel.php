@@ -154,7 +154,13 @@ function run($workermanRequest)
     $response->send();
     $kernel->terminate($request, $response);
 
-    unset($request, $response);
+    $output = ob_get_clean();
 
-    return ob_get_clean();
+    $app->get('db.connection')->disconnect();
+
+    unset($request, $response, $app, $kernel);
+
+    return $output;
 }
+
+Worker::runAll();
