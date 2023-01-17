@@ -29,11 +29,14 @@ $http_worker->onMessage = static function ($connection, $request) {
     $connection->send(run($request));
 };
 
-global $mime;
+global $mime, $hasJwt;
 $mime = new MimeTypes();
+$hasJwt = class_exists(JWT::class);
 
 function run($worker_req)
 {
+    global $hasJwt;
+
     $app = new Application(
         $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__ . '/../../../../../bootstrap/')
     );
@@ -77,7 +80,7 @@ function run($worker_req)
         }
     }
 
-    if (class_exists(JWT::class)) {
+    if ($hasJwt) {
         JWT::customTokenParser(fn () => $request->bearerToken());
     }
 
